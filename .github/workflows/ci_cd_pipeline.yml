@@ -3,28 +3,33 @@ name: Terraform CI/CD
 on:
   push:
     branches:
-      - main  # Run workflow on push to the main branch
+      - main  # Trigger workflow on push to the `main` branch
 
 jobs:
   terraform:
-    runs-on: ubuntu-latest  # GitHub runner
+    runs-on: ubuntu-latest
+
+    env:  # Define environment variables for the entire job
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-west-2 
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3  # Check out your code to the runner
+        uses: actions/checkout@v3
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.5.0  # Make sure the correct version is specified
+          terraform_version: 1.5.0
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform-eks  # Tell Terraform to run in the `terraform-eks` directory
+        working-directory: ./terraform-eks  # Specify subdirectory
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./terraform-eks  # Ensure it runs plan inside the `terraform-eks` directory
+        working-directory: ./terraform-eks
 
       - name: Terraform Apply
         if: github.event_name == 'push'
