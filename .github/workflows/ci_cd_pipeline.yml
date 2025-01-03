@@ -11,24 +11,24 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v3  # Pulls your repo files into the runner
 
-      - name: Print Hello Message
-        run: echo "Hello from GitHub Actions!"
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0  # Use the required Terraform version
 
-      - name: Display System Information
-        run: |
-          echo "Running on $(uname -a)"
-          echo "Current working directory:"
-          pwd
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform-eks  # Initialize the Terraform working directory
 
-      - name: List Files in Terraform Directory
-        run: ls -l ./terraform-eks  # Ensure that files are present
-
-      - name: Run Terraform Validate
+      - name: Terraform Validate
         run: terraform validate
-        working-directory: ./terraform-eks  # Validates configuration files
+        working-directory: ./terraform-eks  # Validates .tf files without building anything
 
-      - name: Run Terraform Plan (Dry Run)
+      - name: Terraform Plan (Dry Run)
         run: terraform plan
-        working-directory: ./terraform-eks  # Dry run without apply
+        working-directory: ./terraform-eks  # Dry run, shows plan without applying changes
+
+      - name: Print Success Message
+        run: echo "GitHub Actions workflow ran successfully without building any resources!"
