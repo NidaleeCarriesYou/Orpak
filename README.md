@@ -43,8 +43,8 @@ The AWS infrastructure is created using Terraform.
 
 ### **Step 1: Clone the repository**
 
-git clone https://github.com/<your-repo>/scalable-infra.git
-cd scalable-infra/terraform-eks
+git clone https://github.com/NidaleeCarriesYou/Orpak.git
+cd terraform-eks
 
 ### **Step 2: Configure AWS Credentials**
 Ensure your AWS credentials are configured.
